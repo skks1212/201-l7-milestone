@@ -70,7 +70,6 @@ class TaskHistoryViewSet(mixins.RetrieveModelMixin,
     filterset_class = TaskHistoryFilter
     
     def get_queryset(self):
-        print(self.kwargs)
         if 'task_pk' in self.kwargs :
             look_up = self.kwargs['task_pk']
             return TaskHistory.objects.filter(task__user=self.request.user, task__deleted=False, task__id = look_up)
