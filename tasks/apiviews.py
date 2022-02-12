@@ -13,6 +13,8 @@ from rest_framework.serializers import ModelSerializer
 
 from rest_framework.viewsets import ModelViewSet
 
+from rest_framework import mixins, viewsets
+
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, CharFilter, ChoiceFilter, DateFromToRangeFilter
 
 STATUS_CHOICES = (
@@ -55,7 +57,10 @@ class TaskHistorySerializer(ModelSerializer):
         fields = ("task","old_status","new_status","date_time",)
 
 
-class TaskHistoryViewSet(ModelViewSet):
+class TaskHistoryViewSet(mixins.RetrieveModelMixin,
+                        viewsets.GenericViewSet,
+                        mixins.ListModelMixin
+                        ):
     queryset = TaskHistory.objects.all()
     serializer_class = TaskHistorySerializer
 
