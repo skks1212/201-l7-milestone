@@ -109,6 +109,7 @@ class GenericTaskUpdateView(AuthorizedTaskManager, UpdateView):
             form_priority = form.cleaned_data['priority']
             checkPriority(form_priority, self.request.user)
 
+        '''
         if 'status' in form.changed_data:
             new_status = form.cleaned_data['status']
             pr_key = self.object.pk
@@ -118,7 +119,7 @@ class GenericTaskUpdateView(AuthorizedTaskManager, UpdateView):
 
             hist = TaskHistory(task = this_task, old_status = old_status, new_status = new_status)
             hist.save()
-
+        '''
 
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())

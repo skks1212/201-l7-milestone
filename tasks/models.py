@@ -3,6 +3,9 @@ from django.db import models
 
 from django.contrib.auth.models import User
 
+from django.dispatch import receiver
+from django.db.models.signals import post_save, pre_save
+
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),
     ("IN_PROGRESS", "IN_PROGRESS"),
@@ -31,3 +34,17 @@ class TaskHistory(models.Model):
 
     def __str__(self):
         return str(self.task)
+
+@receiver(pre_save, sender=Task)
+def generateHistory(instance, **kwargs):
+    try:
+        task = Task.objects.get(pk=instance.id)
+    except:
+        task = None
+
+    if task is not None and task.status != instance.status:
+        TaskHistory.objects.create(
+            task=task,
+            old_status=task.status,
+            new_status=instance.status
+        )

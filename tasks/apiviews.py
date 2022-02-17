@@ -85,12 +85,5 @@ class TaskViewSet(ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TaskFilter
 
-    def get_queryset(self):
-        if 'pk' in self.kwargs :
-            look_up = self.kwargs['pk']
-            return Task.objects.filter(id= look_up, user=self.request.user, deleted=False)
-        else :
-            return Task.objects.filter(user=self.request.user, deleted=False)
-
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
